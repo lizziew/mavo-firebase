@@ -1,0 +1,19 @@
+{
+  "name": "mavo-firebase",
+  "version": "1.0.0",
+  "description": "Mavo Firebase storage backend",
+  "main": "mavo-firebase.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lizziew/mavo-firebase.git"
+  },
+  "author": "Elizabeth Wei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lizziew/mavo-firebase/issues"
+  },
+  "homepage": "https://github.com/lizziew/mavo-firebase#readme"
+}

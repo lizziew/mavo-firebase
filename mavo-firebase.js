@@ -36,6 +36,8 @@ var _ = Mavo.Backend.register($.Class({
 				        clearInterval(initializationCheck);
 				        var provider = new firebase.auth.GoogleAuthProvider();
 								firebase.auth().signInWithPopup(provider).then(function(result) {
+									console.log(result);
+
 									self.accessToken = result.credential.accessToken;
 									self.user = result.user;
 									self.permissions.on(["edit", "add", "delete", "save", "logout"]);
@@ -85,8 +87,6 @@ var _ = Mavo.Backend.register($.Class({
 
 	static: {
 		test: function(url) {
-			console.log("GOT HERE");
-			console.log(url);
 			if(url.indexOf("firebase") !== -1) {
 				return url;
 			}

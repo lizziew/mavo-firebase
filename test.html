@@ -24,14 +24,23 @@
   };
   firebase.initializeApp(config);
 
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', 'https://dessert-eb3dc.firebaseio.com/.settings/rules.json?auth=vsMffJSAzEtweiwxhrQKBK1bD1nTxZeBcHAb9Xi9', true);
-	xhr.send();
-	xhr.onreadystatechange = processRequest;
+	var test_xhr_get = new XMLHttpRequest();
+	test_xhr_get.open('GET', 'https://dessert-eb3dc.firebaseio.com/.settings/rules.json?auth=vsMffJSAzEtweiwxhrQKBK1bD1nTxZeBcHAb9Xi9', true);
+	test_xhr_get.send();
+	test_xhr_get.onreadystatechange = processRequest;
 	function processRequest(e) {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-        var response = xhr.responseText;
-      	console.log(response);
+    if (test_xhr_get.readyState == 4 && test_xhr_get.status == 200) {
+        console.log(test_xhr_get.responseText);
+    }
+	}
+
+	var test_xhr_put = new XMLHttpRequest();
+	test_xhr_put.open('PUT', 'https://dessert-eb3dc.firebaseio.com/.settings/rules.json?auth=vsMffJSAzEtweiwxhrQKBK1bD1nTxZeBcHAb9Xi9', true);
+	test_xhr_put.send('{ "rules": { ".read": true, ".write": true} }');
+	test_xhr_put.onreadystatechange = processRequest;
+	function processRequest(e) {
+    if (test_xhr_put.readyState == 4 && test_xhr_put.status == 200) {
+        console.log(test_xhr_put.responseText);
     }
 	}
 </script>

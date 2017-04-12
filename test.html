@@ -23,6 +23,17 @@
     messagingSenderId: "193049069813"
   };
   firebase.initializeApp(config);
+
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', 'https://dessert-eb3dc.firebaseio.com/.settings/rules.json?auth=vsMffJSAzEtweiwxhrQKBK1bD1nTxZeBcHAb9Xi9', true);
+	xhr.send();
+	xhr.onreadystatechange = processRequest;
+	function processRequest(e) {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+        var response = xhr.responseText;
+      	console.log(response);
+    }
+	}
 </script>
 <section mv-storage="firebase">
 	<h1>Firebase</h1>

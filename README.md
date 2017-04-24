@@ -2,4 +2,12 @@
 
 A Firebase storage backend for Mavo 
 
-# Sign up for Firebase
+# Getting started 
+
+## Sign up for Firebase
+
+
+
+
+
+

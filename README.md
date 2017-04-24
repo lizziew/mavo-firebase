@@ -31,18 +31,18 @@ Use the Firebase plugin by including the ```mv-storage``` attribute with the par
 
 ```javascript
 <section mv-app="firebasetest" mv-storage="firebase">
-	<table>
-		<tr>
-			<td>
-				<ul>
-					<li property="country" mv-multiple>
-						<span property="code">Code</span>
-						<span property="name">Name</span>
-					</li>
-				</ul>
-			</td>
-		</tr>
-	</table>
+  <table>
+    <tr>
+      <td>
+        <ul>
+          <li property="country" mv-multiple>
+            <span property="code">Code</span>
+            <span property="name">Name</span>
+          </li>
+        </ul>
+       </td>
+    </tr>
+  </table>
 </section>
 ```
 

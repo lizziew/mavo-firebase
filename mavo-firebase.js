@@ -11,24 +11,8 @@ var _ = Mavo.Backend.register($.Class({
 		this.permissions.on(["read", "login"]);
 	},
 
-	get authenticated () {
-		return !!this.user;
-	},
-
 	login: function() {
 		return this.ready.then(() => {
-			if(this.authenticated) {
-				console.log("Authenticated into Firebase");
-				this.permissions.on(["edit", "add", "delete", "save"]);
-				$.fire(this.mavo.element, "mavo:login", {
-					 backend: this,
-					 name: `<a>${this.user.displayName}
-										<img class="mv-avatar" src="${this.user.photoURL}" /> ${name}
-									</a>`
-				 });
-				return Promise.resolve();
-			}
-
 			return (new Promise((resolve, reject) => {
 				var self = this;
 				var initializationCheck = setInterval(function() {
@@ -48,7 +32,7 @@ var _ = Mavo.Backend.register($.Class({
 						 								</a>`
 									 });
 								 }).catch(function(error) {
-									 //TBD: display error messages
+										this.mavo.error("There was an error when logging in");
 								 });
 				    }
 				}, 50);
@@ -57,13 +41,10 @@ var _ = Mavo.Backend.register($.Class({
 	},
 
 	logout: function() {
-		if (this.authenticated) {
-			delete this.accessToken;
-			delete this.user;
-			this.permissions.off(["edit", "add", "delete", "save"]).on("login");
-			this.mavo.element._.fire("mavo:logout", {backend: this});
-		}
-
+		delete this.accessToken;
+		this.user = null;
+		this.permissions.off(["edit", "add", "delete", "save"]).on("login");
+		this.mavo.element._.fire("mavo:logout", {backend: this});
 		return Promise.resolve();
 	},
 
@@ -73,6 +54,23 @@ var _ = Mavo.Backend.register($.Class({
 			return JSON.stringify(snapshot.val());
 		}));
 		return null;
+	},
+
+	getUser: function() {
+		if (this.user) {
+			return Promise.resolve(this.user);
+		}
+
+		return this.request("user").then(info => {
+			this.user = {
+				username: info.displayName,
+				name: info.email,
+				avatar: info.photoURL,
+				info
+			};
+
+			$.fire(this.mavo.element, "mavo:login", { backend: this });
+		});
 	},
 
 	/**

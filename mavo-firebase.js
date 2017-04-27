@@ -93,7 +93,9 @@ var _ = Mavo.Backend.register($.Class({
 
 	store: function(data, {path, format = this.format} = {}) {
 		return this.ready.then(() => {
+			console.log("in store!!!!!!");
 			console.log(data);
+			firebase.database().ref('data/').set(data);
 			return data;
 		});
 	},
@@ -106,6 +108,8 @@ var _ = Mavo.Backend.register($.Class({
 	 */
 	put: function(serialized, path = this.path, o = {}) {
 		// TODO: how to get file
+		console.log("in put!!!!");
+		console.log(serialized);
 		file = this.getFile();
 		console.log(serialized);
 		console.log(file['data']);

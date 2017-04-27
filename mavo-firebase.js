@@ -36,9 +36,8 @@ var _ = Mavo.Backend.register($.Class({
 			        var provider = new firebase.auth.GoogleAuthProvider();
 							firebase.auth().signInWithPopup(provider).then(function(result) {
 								self.accessToken = result.credential.accessToken;
-								self.user = result.user;
+								self.getUser(result.user);
 								self.permissions.on(["edit", "add", "delete", "save", "logout"]);
-								self.getUser();
 							 }).catch(function(error) {
 									self.mavo.error("There was an error when logging in");
 							 });
@@ -60,60 +59,39 @@ var _ = Mavo.Backend.register($.Class({
 
 	get: function() {
 		return Promise.resolve(firebase.database().ref('data').once('value').then(function(snapshot) {
-			console.log(JSON.stringify(snapshot.val()));
 			return JSON.stringify(snapshot.val());
 		}));
 		return null;
 	},
 
-	getUser: function() {
-		console.log(this.user);
-
+	getUser: function(info) {
 		if (this.user) {
 			return Promise.resolve(this.user);
 		}
 
-		return this.request("user").then(info => {
+		if (info) {
 			this.user = {
 				username: info.displayName,
 				name: info.email,
 				avatar: info.photoURL,
 				info
 			};
+		}
+		else {
+			return this.request("user").then(info => {
+				this.getUser(info);
 
-			// TODO: avator not showing up
-			$.fire(this.mavo.element, "mavo:login", {
-				backend: this,
-				name: `<a>${info.displayName}
-								 <img class="mv-avatar" src="${info.photoURL}" /> ${name}
-							 </a>`
+				// TODO: avator not showing up
+				$.fire(this.mavo.element, "mavo:login", { backend: this });
 			});
-		});
+		}
 	},
 
 	store: function(data, {path, format = this.format} = {}) {
 		return this.ready.then(() => {
-			console.log("in store!!!!!!");
-			console.log(data);
 			firebase.database().ref('data/').set(data);
 			return data;
 		});
-	},
-
-	/**
-	 * Saves a file to the backend.
-	 * @param {String} serialized - Serialized data
-	 * @param {String} path - Optional file path
-	 * @return {Promise} A promise that resolves when the file is saved.
-	 */
-	put: function(serialized, path = this.path, o = {}) {
-		// TODO: how to get file
-		console.log("in put!!!!");
-		console.log(serialized);
-		file = this.getFile();
-		console.log(serialized);
-		console.log(file['data']);
-		firebase.database().ref('data/').set(file['data']);
 	},
 
 	static: {

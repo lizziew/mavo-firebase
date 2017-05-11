@@ -81,7 +81,6 @@ var _ = Mavo.Backend.register($.Class({
 			return this.request("user").then(info => {
 				this.getUser(info);
 
-				// TODO: avator not showing up
 				$.fire(this.mavo.element, "mavo:login", { backend: this });
 			});
 		}

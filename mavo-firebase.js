@@ -8,8 +8,47 @@ var _ = Mavo.Backend.register($.Class({
 	extends: Mavo.Backend,
 	id: "Firebase",
 	constructor: function() {
-		this.permissions.on(["read", "login"]);
-		this.login(true);
+		console.log(this.mavo.id);
+
+		this.setPermissions();
+	},
+
+	setPermissions() {
+		firebase.database().ref('admin').once('value').then(function(snapshot) {
+			var permissions_key = snapshot.val()["permissions_key"]
+
+			var test_xhr_get = new XMLHttpRequest();
+			test_xhr_get.open('GET', permissions_key, true);
+			test_xhr_get.send();
+			test_xhr_get.onreadystatechange = processRequest;
+			function processRequest(e) {
+		    if (test_xhr_get.readyState == 4 && test_xhr_get.status == 200) {
+		        console.log(test_xhr_get.responseText);
+		    }
+			}
+
+			var test_xhr_put = new XMLHttpRequest();
+			test_xhr_put.open('PUT', permissions_key, true);
+			test_xhr_put.send('{ "rules": { ".read": true, ".write": true} }');
+			test_xhr_put.onreadystatechange = processRequest;
+			function processRequest(e) {
+		    if (test_xhr_put.readyState == 4 && test_xhr_put.status == 200) {
+		        console.log(test_xhr_put.responseText);
+		    }
+			}
+		});
+
+		if(this.mavo.id.includes("public-read")) {
+			this.permissions.on(["read"]);
+		}
+
+		if(this.mavo.id.includes("public-write")) {
+			this.permissions.on(["edit", "add", "delete", "save"]);
+		}
+		else if(this.mavo.id.includes("user-write")){
+			this.permissions.on(["login"]);
+			this.login(true);
+		}
 	},
 
 	isAuthenticated: function() {

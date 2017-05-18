@@ -23,34 +23,9 @@
     messagingSenderId: "193049069813"
   };
   firebase.initializeApp(config);
-
-	firebase.database().ref('admin').once('value').then(function(snapshot) {
-		var permissions_key = snapshot.val()["permissions_key"]
-
-		var test_xhr_get = new XMLHttpRequest();
-		test_xhr_get.open('GET', permissions_key, true);
-		test_xhr_get.send();
-		test_xhr_get.onreadystatechange = processRequest;
-		function processRequest(e) {
-	    if (test_xhr_get.readyState == 4 && test_xhr_get.status == 200) {
-	        console.log(test_xhr_get.responseText);
-	    }
-		}
-
-		var test_xhr_put = new XMLHttpRequest();
-		test_xhr_put.open('PUT', permissions_key, true);
-		test_xhr_put.send('{ "rules": { ".read": true, ".write": false} }');
-		test_xhr_put.onreadystatechange = processRequest;
-		function processRequest(e) {
-	    if (test_xhr_put.readyState == 4 && test_xhr_put.status == 200) {
-	        console.log(test_xhr_put.responseText);
-	    }
-		}
-	});
-
 </script>
 
-<section mv-app="firebasetest" mv-storage="firebase">
+<section mv-app="firebasetest public-read user-write" mv-storage="firebase">
 	<h1>Firebase</h1>
 
 	<p>Everyone can read, but users can edit and delete only their own items</p>
